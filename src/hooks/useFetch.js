@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 
 export function useFetch(pageNumber) {
-    const apiUrl = 'https://delightful-daffodil-63bc65.netlify.app/photos.json';
+    const apiUrl = 'https://almost-json-server.netlify.app/photos.json';
     const numberOfPhotos = 6;
 
     const [images, setGists] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [start, setStart] = useState(0);
+    const [start, setStart] = useState(-1);
 
     useEffect(() => {
+        if (start < 0) {
+            setStart(0);
+            return;
+        }
         setLoading(true);
         fetch(apiUrl)
             .then(response => {
@@ -23,8 +27,9 @@ export function useFetch(pageNumber) {
                     setGists(prev => [...prev, ...data.photos.slice(0, numberOfPhotos)]);
                     setStart(numberOfPhotos);
                 } else {
-                    setGists(prev => [...prev, ...data.photos.slice(start, start + numberOfPhotos)]);
-                    setStart(prev => prev + numberOfPhotos);
+                    let end = start + numberOfPhotos;
+                    setGists(prev => [...prev, ...data.photos.slice(start, end)]);
+                    setStart(end);
                 }
                 setLoading(false);
             })

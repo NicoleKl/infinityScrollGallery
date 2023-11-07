@@ -6,7 +6,7 @@ import LoadingDots from './components/LoadingDots';
 import './App.css';
 
 function App() {
-    const [pageNumber, setPage] = useState(0);
+    const [pageNumber, setPage] = useState(-1);
     const { images, loading, error } = useFetch(pageNumber);
     const loader = useRef(null);
 
